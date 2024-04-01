@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>URL and SVG Overlay Tool</title>
+    <style>
+        body {
+            background-color: #d3c1f8; /* Darker pastel purple background */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background-color: #a092d4;
+            border-bottom: 4px solid #8672b7;
+            padding: 15px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            background-color: #a092d4;
+            border-top: 4px solid #8672b7;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #display-container {
+            position: relative;
+            width: calc(100% - 40px);
+            height: 70vh;
+            border: 3px solid #8672b7;
+            margin: 20px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        #svg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 2px dashed #8672b7;
+            box-sizing: border-box;
+            touch-action: none;
+            transform-origin: 0 0;
+        }
+        button {
+            background-color: #b8a8d6;
+            border: 2px solid #8672b7;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #9f8bc4;
+            transform: translateY(-2px);
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #8672b7;
+            border-radius: 5px;
+            width: calc(100% - 40px);
+        }
+    </style>
+</head>
+<body>
+        <h1>Motoko's wif Hats</h1>
+    <header>
+    <input type="text" id="url-input" placeholder="Motoko Ghost URL" />
+    <button onclick="loadURL()">Display Motoko Ghost</button>
+    <div id="display-container">
+        <iframe id="url-display" style="width:100%; height:100%; border:none;"></iframe>
+        <img id="svg-overlay" src="hat.PNG" style="display:block;" />
+    </div>
+
+    <footer>
+        <a href="https://oc.app/community/aury7-ryaaa-aaaar-auzia-cai/channel/65683588108753554033131868669970869919" class="button">SNEED</a>
+
+        <a href="https://twitter.com/motokowifhat" 
+class="button">MIF Twitter</a>
+    </footer>
+
+    <script>
+        function loadURL() {
+            const urlInput = document.getElementById('url-input');
+            const url = urlInput.value.trim();
+            const iframe = document.getElementById('url-display');
+
+            if (url) {
+                iframe.src = url;
+            } else {
+                alert("Please enter a valid URL.");
+            }
+        }
+
+        const svgOverlay = document.getElementById('svg-overlay');
+        initDragAndScale(svgOverlay);
+
+        function initDragAndScale(element) {
+            let startX = 0, startY = 0, initialScale = 1;
+            let initialDistance = null;
+            let transform = { translateX: 0, translateY: 0, scale: 1 };
+
+            element.addEventListener('touchstart', function(e) {
+                if (e.touches.length === 2) {
+                    const dx = e.touches[0].pageX - e.touches[1].pageX;
+                    const dy = e.touches[0].pageY - e.touches[1].pageY;
+                    initialDistance = Math.sqrt(dx * dx + dy * dy);
+                    const rect = element
+
+.getBoundingClientRect();
+                    startX = (e.touches[0].pageX + e.touches[1].pageX) / 2 - rect.left;
+                    startY = (e.touches[0].pageY + e.touches[1].pageY) / 2 - rect.top;
+                    initialScale = transform.scale;
+                } else if (e.touches.length === 1) {
+                    startX = e.touches[0].clientX - transform.translateX;
+                    startY = e.touches[0].clientY - transform.translateY;
+                }
+            }, { passive: false });
+
+            element.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+                if (e.touches.length === 2) {
+                    const dx = e.touches[0].pageX - e.touches[1].pageX;
+                    const dy = e.touches[0].pageY - e.touches[1].pageY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const scale = initialScale * (distance / initialDistance);
+
+                    transform.scale = scale;
+                    applyTransform(element);
+                } else if (e.touches.length === 1) {
+                    transform.translateX = e.touches[0].clientX - startX;
+                    transform.translateY = e.touches[0].clientY - startY;
+                    applyTransform(element);
+                }
+            }, { passive: false });
+
+            function applyTransform(elem) {
+                elem.style.transform = `translate(${transform.translateX}px, ${transform.translateY}px) scale(${transform.scale})`;
+            }
+        }
+    </script>
+</div>
+</p> Please resize the hat to fit your Motoko! Take a screenshot when you like the fit! Minting Coming Soon <p>
+</body>
+</html>

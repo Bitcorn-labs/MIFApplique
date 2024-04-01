@@ -1,4 +1,4 @@
-# MIFapplique
+# MIFappliqué
 
 ## Motokos wif Hats
 
